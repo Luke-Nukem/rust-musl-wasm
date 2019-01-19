@@ -17,6 +17,7 @@ RUN apt-get update && \
     libssl-dev \
     pkgconf \
     sudo \
+    zip \
     xutils-dev \
     python \
     && apt-get clean
@@ -38,6 +39,7 @@ ADD sudoers /etc/sudoers.d/nopasswd
 
 # Static linking for C++ code
 RUN sudo ln -s "/usr/bin/g++" "/usr/bin/musl-g++"
+RUN sudo ln -s "/usr/bin/gcc "/usr/bin/musl-gcc
 
 RUN \
 curl https://nodejs.org/download/release/latest-v9.x/node-v9.11.2-linux-x64.tar.xz | tar --strip-components 1 -Jx -C /usr/
@@ -46,7 +48,7 @@ curl https://nodejs.org/download/release/latest-v9.x/node-v9.11.2-linux-x64.tar.
 # as the appropriate user.
 USER rust
 RUN mkdir -p /home/rust/libs /home/rust/src
-ENV PATH=/home/rust/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=/home/rust/.cargo/bin:/usr/local/musl/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 RUN \
  cd /home/rust && \
